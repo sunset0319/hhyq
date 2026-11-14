@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>后会友期 · 人格观测 | 你是哪一个角色</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2316201A'/%3E%3Crect x='8' y='8' width='48' height='48' fill='none' stroke='%23B23A2B' stroke-width='3'/%3E%3Ctext x='32' y='42' font-size='30' font-family='serif' fill='%23B23A2B' text-anchor='middle'%3E后%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@600;700;900&amp;family=Noto+Sans+SC:wght@400;500&amp;display=swap">
+<style>
+:root{
+  --paper:#E7E8E1;
+  --paper-deep:#DDE0D6;
+  --ink:#16201A;
+  --ink-2:#3D4A43;
+  --ink-3:#6C7770;
+  --line:rgba(22,32,26,.16);
+  --line-soft:rgba(22,32,26,.08);
+  --red:#B23A2B;
+  --red-soft:rgba(178,58,43,.12);
+  --serif:"Noto Serif SC","Songti SC","STSong",serif;
+  --sans:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:#0F1713;
+  font-family:var(--sans);
+  color:var(--ink);
+  line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+  display:flex;
+  justify-content:center;
+}
+.shell{
+  position:relative;
+  width:100%;
+  max-width:560px;
+  min-height:100vh;
+  background:var(--paper);
+  overflow:hidden;
+  box-shadow:0 0 0 1px rgba(255,255,255,.05),0 30px 90px rgba(0,0,0,.5);
+}
+.grain{
+  position:absolute;inset:0;pointer-events:none;z-index:0;
+  opacity:.055;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:140px 140px;
+}
+.wrap{position:relative;z-index:1;padding:0 26px 40px}
+
+/* ===== 顶栏 ===== */
+.bar{
+  position:sticky;top:0;z-index:20;
+  display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+  padding:18px 26px 12px;
+  background:linear-gradient(to bottom,var(--paper) 70%,rgba(231,232,225,0));
+}
+.bar-brand{
+  font-family:var(--serif);font-weight:700;font-size:13px;letter-spacing:.18em;color:var(--ink-2);
+}
+.bar-meta{font-size:12px;color:var(--ink-3);letter-spacing:.06em;font-variant-numeric:tabular-nums}
+.bar-meta .num{color:var(--red);font-weight:500}
+
+/* ===== 封面 ===== */
+.cover{padding-top:34px;position:relative}
+.seal{
+  position:absolute;top:2px;right:0;
+  width:56px;height:56px;
+  display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;
+  border:2px solid var(--red);
+  border-radius:3px;
+  transform:rotate(4deg);
+  color:var(--red);
+  font-family:var(--serif);font-weight:700;font-size:15px;line-height:1;
+  background:rgba(178,58,43,.05);
+}
+.seal i{display:flex;align-items:center;justify-content:center;font-style:normal}
+.seal::after{content:"";position:absolute;inset:3px;border:1px solid rgba(178,58,43,.35);border-radius:2px}
+
+h1{
+  font-family:var(--serif);font-weight:900;
+  font-size:clamp(52px,15vw,76px);
+  line-height:1.02;
+  letter-spacing:.04em;
+  margin:46px 0 0;
+}
+h1 span{display:block}
+.cover-sub{
+  font-family:var(--serif);font-weight:600;
+  font-size:19px;line-height:1.7;color:var(--ink-2);
+  margin-top:20px;letter-spacing:.02em;
+}
+.rule{height:1px;background:var(--line);margin:26px 0}
+.cover-copy{font-size:14.5px;color:var(--ink-2);text-indent:0}
+.cover-copy p+p{margin-top:10px}
+.cover-copy .whisper{color:var(--ink-3);font-size:13.5px}
+
+.facts{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  margin:28px 0 30px;
+}
+.facts div{padding:14px 8px 15px;border-right:1px solid var(--line-soft)}
+.facts div:last-child{border-right:0}
+.facts dt{font-size:11px;letter-spacing:.16em;color:var(--ink-3);margin-bottom:4px}
+.facts dd{font-family:var(--serif);font-weight:700;font-size:17px;letter-spacing:.01em}
+
+.btn{
+  display:block;width:100%;
+  border:0;cursor:pointer;
+  background:var(--ink);color:var(--paper);
+  font-family:var(--serif);font-weight:700;font-size:17px;letter-spacing:.22em;
+  padding:17px 0;border-radius:2px;
+  transition:transform .16s ease,background .16s ease;
+}
+.btn:hover{background:#22302A}
+.btn:active{transform:scale(.985)}
+.btn.ghost{
+  background:transparent;color:var(--ink);
+  border:1px solid var(--line);
+  font-size:14px;letter-spacing:.12em;padding:13px 0;
+}
+.btn.ghost:hover{background:rgba(22,32,26,.05)}
+.tiny{font-size:11.5px;color:var(--ink-3);line-height:1.8;margin-top:18px;letter-spacing:.01em}
+
+/* ===== 答题 ===== */
+.view{display:none}
+.view.on{display:block;animation:fadeUp .28s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+.quiz-head{display:flex;align-items:baseline;justify-content:space-between;padding-top:12px}
+.quiz-head .idx{font-family:var(--serif);font-weight:700;font-size:13px;letter-spacing:.1em}
+.quiz-head .idx b{color:var(--red);font-size:19px;margin-right:2px}
+.back{
+  background:none;border:0;cursor:pointer;color:var(--ink-3);
+  font-size:12.5px;letter-spacing:.04em;padding:4px 0;font-family:var(--sans);
+  border-bottom:1px solid transparent;
+}
+.back:hover{color:var(--ink);border-bottom-color:var(--line)}
+.back[disabled]{opacity:.3;cursor:default}
+
+.ticks{display:flex;gap:4px;margin:14px 0 40px}
+.ticks i{
+  flex:1;height:3px;background:var(--line);display:block;
+  transition:background .2s ease;
+}
+.ticks i.done{background:var(--ink-3)}
+.ticks i.now{background:var(--red)}
+
+.q-text{
+  font-family:var(--serif);font-weight:700;
+  font-size:22px;line-height:1.6;letter-spacing:.01em;
+  min-height:2.4em;
+}
+.options{margin-top:26px;display:flex;flex-direction:column;gap:10px}
+.opt{
+  display:flex;align-items:flex-start;gap:14px;
+  width:100%;text-align:left;cursor:pointer;
+  border:1px solid var(--line);background:rgba(255,255,255,.28);
+  padding:15px 16px;border-radius:2px;
+  font-family:var(--sans);font-size:14.5px;line-height:1.65;color:var(--ink);
+  transition:background .15s ease,border-color .15s ease,color .15s ease,transform .12s ease;
+}
+.opt .key{
+  flex:0 0 22px;height:22px;margin-top:1px;
+  display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--line);border-radius:50%;
+  font-family:var(--serif);font-weight:700;font-size:12px;color:var(--ink-2);
+  transition:all .15s ease;
+}
+.opt:hover{border-color:var(--ink-2);background:rgba(255,255,255,.55)}
+.opt.picked{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.opt.picked .key{border-color:var(--paper);color:var(--paper)}
+.quiz-hint{
+  margin-top:30px;font-size:12px;color:var(--ink-3);letter-spacing:.04em;
+  display:flex;align-items:center;gap:8px;
+}
+.quiz-hint::before{content:"";width:18px;height:1px;background:var(--ink-3);display:block}
+
+/* ===== 结算 ===== */
+.scan{padding:24vh 0 0;text-align:center}
+.scan-ring{
+  width:78px;height:78px;margin:0 auto 30px;border-radius:50%;
+  border:1px solid var(--line);position:relative;
+  display:flex;align-items:center;justify-content:center;
+}
+.scan-ring::before{
+  content:"";position:absolute;inset:-1px;border-radius:50%;
+  border:1px solid transparent;border-top-color:var(--red);
+  animation:spin 1.05s linear infinite;
+}
+.scan-ring b{font-family:var(--serif);font-size:26px;color:var(--red);font-variant-numeric:tabular-nums}
+@keyframes spin{to{transform:rotate(360deg)}}
+.scan-title{font-family:var(--serif);font-weight:700;font-size:18px;letter-spacing:.1em}
+.scan-sub{margin-top:12px;font-size:12.5px;color:var(--ink-3);letter-spacing:.02em}
+.scan-line{height:1px;background:var(--line);margin:34px 18% 0;position:relative;overflow:hidden}
+.scan-line i{position:absolute;top:0;left:0;height:1px;width:0;background:var(--red);animation:load 1.5s ease forwards}
+@keyframes load{to{width:100%}}
+
+/* ===== 结果 ===== */
+.result{padding-top:10px}
+.res-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+.res-kind{
+  font-size:11.5px;letter-spacing:.16em;color:var(--ink-3);
+  padding-top:4px;
+}
+.res-kind .code{
+  display:block;margin-top:7px;font-family:var(--serif);font-weight:700;
+  font-size:13px;letter-spacing:.1em;color:var(--red);
+}
+.hidden-badge{
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  width:58px;height:58px;flex:0 0 58px;
+  border:2px solid var(--red);border-radius:3px;transform:rotate(-5deg);
+  color:var(--red);font-family:var(--serif);font-weight:700;font-size:13px;
+  line-height:1.15;letter-spacing:.06em;background:rgba(178,58,43,.06);
+  text-align:center;
+}
+.hidden-badge.show{display:flex}
+
+.res-name{
+  font-family:var(--serif);font-weight:900;
+  font-size:clamp(40px,11vw,52px);line-height:1.15;letter-spacing:.06em;
+  margin-top:26px;
+}
+.res-title{
+  font-family:var(--serif);font-weight:600;font-size:15px;color:var(--ink-2);
+  letter-spacing:.06em;margin-top:10px;
+}
+.quote{
+  margin:26px 0 0;padding:20px 0 0;
+  border-top:1px solid var(--line);
+  font-family:var(--serif);font-weight:700;font-size:16.5px;line-height:1.85;
+  color:var(--red);letter-spacing:.01em;
+}
+
+.dims{margin-top:26px;display:flex;flex-direction:column;gap:9px}
+.dim{display:grid;grid-template-columns:52px 1fr 30px;align-items:center;gap:10px}
+.dim dt{font-size:12px;color:var(--ink-2);letter-spacing:.06em}
+.dim .track{height:6px;background:rgba(22,32,26,.14);position:relative;border-radius:1px;overflow:hidden}
+.dim .fill{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--ink-2);transition:width .9s cubic-bezier(.2,.8,.2,1)}
+.dim .fill.top{background:var(--red)}
+.dim dd{font-size:11.5px;color:var(--ink-3);text-align:right;font-variant-numeric:tabular-nums}
+
+.body-copy{margin-top:34px}
+.body-copy p{font-size:14.5px;line-height:1.95;color:var(--ink);margin-bottom:14px}
+.body-copy p:first-letter{}
+
+.tagrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.tag{
+  font-size:11.5px;letter-spacing:.04em;color:var(--ink-2);
+  border:1px solid var(--line);padding:4px 10px;border-radius:999px;
+}
+.match{
+  margin-top:28px;padding:18px 20px;background:var(--paper-deep);
+}
+.match .k{font-size:11px;letter-spacing:.14em;color:var(--red)}
+.match .v{font-family:var(--serif);font-weight:600;font-size:15px;margin-top:6px;line-height:1.7}
+
+.actions{margin-top:34px;display:flex;flex-direction:column;gap:10px}
+.actions .row{display:flex;gap:10px}
+.actions .row .btn{flex:1}
+
+details{
+  margin-top:30px;border-top:1px solid var(--line);padding-top:16px;
+}
+summary{
+  cursor:pointer;list-style:none;font-family:var(--serif);font-weight:700;
+  font-size:13.5px;letter-spacing:.1em;color:var(--ink-2);
+  display:flex;align-items:center;justify-content:space-between;
+}
+summary::-webkit-details-marker{display:none}
+summary .plus{font-family:var(--sans);color:var(--ink-3);font-size:15px;transition:transform .2s ease}
+details[open] summary .plus{transform:rotate(45deg)}
+.allgrid{display:grid;grid-template-columns:1fr;gap:0;margin-top:10px}
+.allgrid .it{
+  display:flex;align-items:baseline;gap:10px;padding:10px 0;
+  border-bottom:1px solid var(--line-soft);
+  font-size:13px;
+}
+.allgrid .it b{font-family:var(--serif);font-weight:700;min-width:4.6em;letter-spacing:.06em}
+.allgrid .it span{color:var(--ink-3);font-size:12px}
+.allgrid .it.hid span::before{content:"隐藏 · ";color:var(--red)}
+.allgrid .it.me b{color:var(--red)}
+.rules{margin-top:12px;font-size:12.5px;line-height:1.95;color:var(--ink-2)}
+.rules li{list-style:none;margin-bottom:7px;padding-left:14px;position:relative}
+.rules li::before{content:"";position:absolute;left:0;top:.75em;width:5px;height:1px;background:var(--ink-3)}
+
+footer{
+  margin:36px 26px 0;padding:18px 0 0;border-top:1px solid var(--line);
+  font-size:11px;line-height:1.9;color:var(--ink-3);letter-spacing:.02em;
+}
+
+@media (max-width:640px){
+  body{background:var(--paper)}
+  .shell{box-shadow:none}
+}
+@media (min-width:641px){
+  body{padding:44px 0}
+  .shell{min-height:0;border-radius:2px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.001s!important;transition-duration:.001s!important}
+  .dim .fill{transition:none}
+}
+</style>
+</head>
+<body>
+<main class="shell">
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- ===== 顶栏 ===== -->
+  <div class="bar">
+    <span class="bar-brand">后会友期</span>
+    <span class="bar-meta" id="barMeta">人格观测</span>
+  </div>
+
+  <div class="wrap">
+
+    <!-- ===== 视图：封面 ===== -->
+    <section class="view on" id="viewCover">
+      <div class="cover">
+        <div class="seal" aria-hidden="true"><i>后</i><i>会</i><i>友</i><i>期</i></div>
+        <h1><span>后会友期</span></h1>
+        <p class="cover-sub">你在别人的友情里，<br>是哪一个角色。</p>
+        <div class="rule"></div>
+        <div class="cover-copy">
+          <p>四对旧友上了一趟高原，把十年前没说清的话重新摊开说了一遍。有人在车上笑着，有人在山顶哭了，有人只是放下水杯就走了。</p>
+          <p class="whisper">现在换你。同样这些场面换你坐在那儿，你会是谁。</p>
+        </div>
+        <dl class="facts">
+          <div><dt>题目</dt><dd>10 题</dd></div>
+          <div><dt>用时</dt><dd>约 2 分钟</dd></div>
+          <div><dt>角色</dt><dd>15 种</dd></div>
+        </dl>
+        <button class="btn" id="startBtn">开始观测</button>
+        <p class="tiny">凭第一反应作答，别回头改。15 种角色里有 7 种是观察室隐藏款，只有特定的答题结构才会被叫去"观察席"。</p>
+      </div>
+    </section>
+
+    <!-- ===== 视图：答题 ===== -->
+    <section class="view" id="viewQuiz">
+      <div class="quiz-head">
+        <span class="idx"><b id="qNo">1</b> / 10 题</span>
+        <button class="back" id="backBtn" type="button">上一题</button>
+      </div>
+      <div class="ticks" id="ticks" aria-hidden="true"></div>
+      <h2 class="q-text" id="qText" aria-live="polite">题目</h2>
+      <div class="options" id="options"></div>
+      <p class="quiz-hint">第一反应最准，别替自己美化</p>
+    </section>
+
+    <!-- ===== 视图：结算 ===== -->
+    <section class="view" id="viewScan">
+      <div class="scan">
+        <div class="scan-ring"><b id="scanNum">0</b></div>
+        <p class="scan-title">正在比对观测记录</p>
+        <p class="scan-sub" id="scanSub">286 种维度组合 · 15 份人格档案</p>
+        <div class="scan-line"><i></i></div>
+      </div>
+    </section>
+
+    <!-- ===== 视图：结果 ===== -->
+    <section class="view" id="viewResult">
+      <div class="result">
+        <div class="res-head">
+          <div class="res-kind">
+            观测档案 第 01 期
+            <div class="code" id="resCode">直 × 执</div>
+          </div>
+          <div class="hidden-badge" id="hiddenBadge">隐藏<br>款</div>
+        </div>
+        <h2 class="res-name" id="resName">角色</h2>
+        <p class="res-title" id="resTitle">称号</p>
+        <p class="quote" id="resQuote">一句话</p>
+
+        <dl class="dims" id="dims"></dl>
+
+        <div class="body-copy" id="resBody"></div>
+        <div class="tagrow" id="resTags"></div>
+
+        <div class="match">
+          <div class="k">你待得住的关系</div>
+          <div class="v" id="resMatch">—</div>
+        </div>
+
+        <div class="actions">
+          <div class="row">
+            <button class="btn ghost" id="copyBtn" type="button">复制结果文案</button>
+            <button class="btn ghost" id="againBtn" type="button">再测一次</button>
+          </div>
+        </div>
+
+        <details>
+          <summary>全部 15 种角色 <span class="plus">+</span></summary>
+          <div class="allgrid" id="allGrid"></div>
+        </details>
+
+        <details>
+          <summary>计分方式 <span class="plus">+</span></summary>
+          <ul class="rules">
+            <li>每题四个选项分别对应四个维度：直球（当场就办）、执念（心里记账）、体面（算清边界）、洒脱（随时放手）。</li>
+            <li>10 题答完，统计四个维度各得几分，满分 10 分。</li>
+            <li>先看是否命中隐藏款结构：比如又清醒又敢说、只有理性从不情绪化、极直球且不打算体面、永远不掺和只旁观——命中就直接进观察席。</li>
+            <li>没命中隐藏款时，取得分最高的两个维度组合，12 种组合对应 8 位正片角色。</li>
+            <li>最高分并列时，按「直球 → 执念 → 体面 → 洒脱」的顺序取前者。合计 1,048,576 种作答路径，15 份档案都能被走到。</li>
+          </ul>
+        </details>
+      </div>
+    </section>
+
+    <footer id="siteFooter">
+      本测试为节目二创娱乐内容，人物设定取自公众印象，不代表真实人格，也不构成任何心理测评结论。转发出结果请注明出处。
+    </footer>
+  </div>
+</main>
+
+<script>
+/* ================= 题目数据 ================= */
+/* dim: d 直球 / s 执念 / r 体面 / f 洒脱 */
+var QUESTIONS = [
+  { q:"约好七点，对方迟到四十分钟，也没回消息。", o:[
+    {k:"r",t:"等，不催。但心里已经决定了：下次不约了。"},
+    {k:"d",t:"直接打过去问在哪，该说的当场说。"},
+    {k:"f",t:"算了，改天再说，我先去吃点东西。"},
+    {k:"s",t:"坐着等，一直在想是不是自己约得不对。"}
+  ]},
+  { q:"你听说，朋友在别人面前说了你的事。", o:[
+    {k:"s",t:"不问，但会反复想他为什么这么说。"},
+    {k:"r",t:"先弄清楚是真是假，再决定要不要处理。"},
+    {k:"d",t:"直接问他，当面把话摊开。"},
+    {k:"f",t:"不问了，别人的嘴我也管不住。"}
+  ]},
+  { q:"朋友借了钱，一直不提还的事。", o:[
+    {k:"d",t:"直接开口要，钱的事不能含糊。"},
+    {k:"s",t:"不好意思催，但心里已经开始记账。"},
+    {k:"f",t:"金额不大就算了，以后不借就行。"},
+    {k:"r",t:"找个不那么尴尬的时机提一次，看他的反应。"}
+  ]},
+  { q:"在你的友情里，什么事是绝对过不去的。", o:[
+    {k:"s",t:"骗我可以，但别让我发现你在骗我。"},
+    {k:"f",t:"好像没有，人都这样，能理解。"},
+    {k:"d",t:"背刺和糊弄，一次就够了。"},
+    {k:"r",t:"碰原则的不行，其他都能坐下来谈。"}
+  ]},
+  { q:"一段友情慢慢没话说了。", o:[
+    {k:"d",t:"我会主动找话题，不想就这么散。"},
+    {k:"r",t:"接受，成年人的关系本来就是阶段性的。"},
+    {k:"s",t:"我不主动，但他找我我一定秒回。"},
+    {k:"f",t:"顺其自然，散了也不遗憾。"}
+  ]},
+  { q:"和好朋友吵起来了。", o:[
+    {k:"r",t:"尽量压住情绪，只谈这件事本身。"},
+    {k:"s",t:"突然不说话了，回家自己消化。"},
+    {k:"d",t:"越说越急，什么话都往外说。"},
+    {k:"f",t:"不想吵，找个借口先撤。"}
+  ]},
+  { q:"朋友在别人面前，开了你不喜欢的玩笑。", o:[
+    {k:"f",t:"不介意，他大概没别的意思。"},
+    {k:"d",t:"当场顶回去，我不吃这一套。"},
+    {k:"s",t:"笑着过去了，但这句话我能记很久。"},
+    {k:"r",t:"事后再私下说清楚，不当众难看。"}
+  ]},
+  { q:"朋友拿到了你也很想要的东西。", o:[
+    {k:"f",t:"各走各的路，我不跟人比。"},
+    {k:"s",t:"替他高兴，但会难受一阵，会偷偷比较。"},
+    {k:"r",t:"恭喜他，然后慢慢减少联系，圈子不一样了。"},
+    {k:"d",t:"真心祝贺，回去自己更用力一点。"}
+  ]},
+  { q:"翻到很多年前的一张合照。", o:[
+    {k:"r",t:"存下来，偶尔看看，不特意联系。"},
+    {k:"s",t:"看很久，把聊天记录翻一遍，最后什么都没发。"},
+    {k:"d",t:"直接发给他：你看我们那时候多傻。"},
+    {k:"f",t:"划过去，照片而已。"}
+  ]},
+  { q:"如果真去参加《后会友期》这种和解节目。", o:[
+    {k:"d",t:"把当年没说完的话说完，我要一个答案。"},
+    {k:"r",t:"给自己一个交代，体面地把这段画上句号。"},
+    {k:"f",t:"好奇体验一下，和不和解都行。"},
+    {k:"s",t:"我想知道他当时到底是怎么想的。"}
+  ]}
+];
+
+var DIM = {
+  d:{name:"直球", hint:"当场就办"},
+  s:{name:"执念", hint:"心里记账"},
+  r:{name:"体面", hint:"算清边界"},
+  f:{name:"洒脱", hint:"随时放手"}
+};
+var ORDER = ["d","s","r","f"];
+
+/* ================= 角色档案 ================= */
+var ROLES = {
+  lina:{
+    name:"厉娜", title:"底线焊死 · 恩怨分明", hidden:false,
+    hook:"你可以不认我，但你不能糊弄我。",
+    body:[
+      "你对朋友的好是没有保留的，所以你要求回来的东西也很硬：一句真话、一个态度、一次不敷衍。",
+      "你可以接受吵架，接受难看，接受当场把话说崩，但你不接受被当成一个可以随便应付的人。一旦确认对方没把你当回事，你会非常干脆地把门关上，而且不再打开。",
+      "别人说你记仇，其实你只是不肯再低一次头。画地为牢不是放不下，是你给自己的尊重。"
+    ],
+    tags:["零容忍","当场开麦","关门不回头"],
+    match:"有话当面说、旗鼓相当、不猜来猜去"
+  },
+  xufei:{
+    name:"许飞", title:"要真相不要体面 · 内耗软核", hidden:false,
+    hook:"我可以原谅，但我得先知道你当时是怎么想的。",
+    body:[
+      "你不在乎场面好不好看，你在乎那件事到底是怎么发生的。你会把十年前的对话在心里回放，把每个语气词都拿出来重新听一遍。",
+      "你的表达很轻，轻到别人以为你已经过去了。其实你不是过去了，你只是把情绪压缩成很淡的一句话，然后在深夜里把它展开。",
+      "你最怕的不是散，是散得不明不白。你需要一个解释，哪怕那个解释会让你更疼。"
+    ],
+    tags:["追问到底","情绪回放机","表面很淡"],
+    match:"肯解释、愿意回应、不装没事"
+  },
+  zhangmeng:{
+    name:"张萌", title:"清醒大女主 · 组的那个局", hidden:false,
+    hook:"别伤感了，先拉个群，我订时间。",
+    body:[
+      "天塌下来，你的第一反应不是哭，是列清单：谁联系谁、几点、在哪儿、谁负责什么。",
+      "你直，但你有分寸，所以你的直不伤人。你骂人的时候会顺手把解决方案一起给出来，别人嘴上不服，心里服。",
+      "你的热情不廉价，它是有安排的。你不是天生爱操心，你只是受不了事情一直烂在那儿。"
+    ],
+    tags:["行动派","会做局","情绪稳定供货商"],
+    match:"目标一致、肯配合、不消耗"
+  },
+  matianyu:{
+    name:"马天宇", title:"温柔内耗 · 人间小透明", hidden:false,
+    hook:"没事，你们先玩，我都行。（其实不都行）",
+    body:[
+      "你是全场最会照顾别人情绪的人。谁不高兴了你第一个发现，也第一个去哄，还要装作只是顺便。",
+      "你把自己的难受说成天气：今天有点闷。通讯录翻到底，也找不到一个可以真的说下去的人。",
+      "你温柔不是因为弱，是因为你太清楚被忽略是什么滋味，所以你不愿意让别人也尝一口。"
+    ],
+    tags:["共情天花板","报备式抱歉","什么都自己扛"],
+    match:"细水长流、不用刻意维系也不会走"
+  },
+  wenjier:{
+    name:"文吉儿", title:"细节翻账王 · 较真到骨子里", hidden:false,
+    hook:"我记得是三月十四号下午四点，你说的那句“随便你”。",
+    body:[
+      "你的记忆库里存着别人早就删掉的瞬间：那天几点、什么天气、他先说哪一句话。",
+      "你不是小心眼，你是太在意那段关系，才会记得那么清。你要的从来不是一句对不起，是有人承认那天确实发生过什么。",
+      "你较真的地方，往往就是你最柔软的地方。"
+    ],
+    tags:["时间戳记忆","要一个承认","不接受糊弄"],
+    match:"坦诚、肯复盘、不敷衍"
+  },
+  wangzixuan:{
+    name:"王子璇", title:"体面人天花板 · 退钱绝交", hidden:false,
+    hook:"钱我转回去了，联系方式我留着，但不打算用。",
+    body:[
+      "你不撕、不哭、不发长文。你把该还的还回去，把该说的说完，然后把人放回原位。",
+      "你的克制不是没脾气，是觉得失态不值。所有的难看你都自己消化，只把结果给对方看。",
+      "你走得很干净，干净到对方过了很久才反应过来：你是真的走了。"
+    ],
+    tags:["算清再走","不吵不闹","情绪不外泄"],
+    match:"有边界感、守约、不占便宜"
+  },
+  qingzhi:{
+    name:"青稚", title:"后知后觉 · 失去了才懂", hidden:false,
+    hook:"当时觉得无所谓，现在想补一句对不起。",
+    body:[
+      "你反应慢半拍。别人走远了，你才想起当时该说的那句话。",
+      "你的重新联系总是来得有点晚。你发的是“最近怎么样”，其实想说的是“那天是我不好”。",
+      "你不擅长维持，但你很擅长惦记。你补上的那句对不起是真的，只是迟到了。"
+    ],
+    tags:["慢半拍","事后才懂","迟到的真诚"],
+    match:"能等、不翻旧账、接受迟到"
+  },
+  baixiaochun:{
+    name:"白小纯", title:"释怀不原谅 · 界限感王者", hidden:false,
+    hook:"我不恨你，但我也没打算再见你。",
+    body:[
+      "你的“算了”是真的算了。你不恨，也不打算再见。",
+      "你不搞仪式感，不需要谁给你一个交代，也不会为了显得大度而勉强自己笑。",
+      "你把退场处理得像关灯一样自然。别人还在原地等解释，你已经走到下一段路了。"
+    ],
+    tags:["干净退场","不解释","不回头"],
+    match:"简单直接、不追问、各过各的"
+  },
+
+  zql:{
+    name:"张泉灵", title:"人间清醒 · 观察室天花板", hidden:true,
+    hook:"你们吵的不是这件事，是这十年谁欠谁。",
+    body:[
+      "别人还在情绪里绕圈的时候，你已经把结构看清楚了：这场架真正争的不是那件小事，是这十年里谁欠了谁。",
+      "你体面分很高，但你不靠沉默维持体面——该点的时候你会点，只是点得准，点事不点人。",
+      "你不内耗，也不逃。你是那种看完就想坐下来讲两句的人，而且你讲的那两句，通常是对的。"
+    ],
+    tags:["上帝视角","一句话点题","情绪不背锅"],
+    match:"听得进真话、不玻璃心"
+  },
+  lwj:{
+    name:"李维嘉", title:"控场大师 · 吃瓜第一线", hidden:true,
+    hook:"先别急着吵，来，谁先说。",
+    body:[
+      "你不掺和，但你掌镜。谁先说、谁在躲、谁的话里有话，你全看在眼里。",
+      "你能让场子不冷，也能在关键处补一刀，而且补得刚好不越界。",
+      "你的分寸是综艺级的：既让人有戏看，也让人下得来台。"
+    ],
+    tags:["会主持","会补刀","不站队"],
+    match:"有戏看、会接梗、不较真"
+  },
+  zbc:{
+    name:"周笔畅", title:"社恐观察员 · 话少但准", hidden:true,
+    hook:"（沉默七分钟）我觉得他没那么在意。",
+    body:[
+      "你不擅长解释自己，但你很会看人。整场你最安静，也最准。",
+      "你憋了七分钟说一句话，那句话能顶别人十分钟。",
+      "你不是不在乎，你是在乎得太费电。退场对你来说是充电，不是逃跑。"
+    ],
+    tags:["低频高质","暗中观察","一句封喉"],
+    match:"不逼你说话、能安静相处"
+  },
+  sx:{
+    name:"苏醒", title:"互联网嘴替 · 观察室炮台", hidden:true,
+    hook:"这话我说了，你们爱听不听。",
+    body:[
+      "你是那种当场把气氛掀开的人。所有人都知道有问题，只有你说出来了。",
+      "你的直不是没情商，是你觉得绕一圈更浪费时间。你宁可挨骂，也不想配合一场假客气。",
+      "你替所有人说了那句不敢说的，所以大家一边骂你，一边偷偷同意你。"
+    ],
+    tags:["敢说","毒舌但准","不装"],
+    match:"能接直球、不记仇、有点幽默感"
+  },
+  hzhf:{
+    name:"黄子弘凡", title:"快乐小狗 · 气氛组组长", hidden:true,
+    hook:"都别 emo 了，我请大家吃饭。",
+    body:[
+      "你一进门，房间就亮了。你负责把所有人的尴尬接住，再顺手扔进笑话里。",
+      "你的高能量不是没受过伤，是你决定不用伤口去换关注。",
+      "你哄人的方式很笨：请吃饭、拉群、发一堆没营养的表情包。但每次都有效。"
+    ],
+    tags:["高能量","会哄人","不记仇"],
+    match:"能一起玩、不端着、玩得起"
+  },
+  htt:{
+    name:"黄婷婷", title:"全咽下去 · 云淡风轻派", hidden:true,
+    hook:"没关系，我真的没关系。（第三次说这句）",
+    body:[
+      "你从不现场发作。你把所有话咽回去，换成一句都行、没关系、你忙你的。",
+      "你的体面不是天生的，是练出来的。你已经很会把自己放到最后一位，熟练到不需要犹豫。",
+      "你很少崩。但一崩就是彻底的，而且只有你自己知道。"
+    ],
+    tags:["情绪自留地","从不现场炸","报喜不报忧"],
+    match:"会主动问一句你真的还好吗"
+  },
+  yf:{
+    name:"喻丰", title:"心理显微镜 · 理性到骨头", hidden:true,
+    hook:"你现在的愤怒，其实是七岁那年的委屈。",
+    body:[
+      "你习惯把情绪翻译成机制：他这样是因为什么，我这样又是因为什么。",
+      "你能解释所有人的行为，除了自己深夜里那点说不清的东西。",
+      "你最擅长的不是冷漠，是给混乱找一个说法。有了说法，你就能继续往前走。"
+    ],
+    tags:["结构思维","拆解情绪","旁观自己"],
+    match:"讲道理、不情绪绑架、有耐心"
+  }
+};
+
+/* ================= 计分 ================= */
+var PAIR = {
+  "d|s":"lina","d|r":"zhangmeng","d|f":"qingzhi",
+  "s|d":"xufei","s|r":"wenjier","s|f":"xufei",
+  "r|d":"wangzixuan","r|f":"wangzixuan","r|s":"wenjier",
+  "f|d":"baixiaochun","f|r":"matianyu","f|s":"matianyu"
+};
+
+function judge(c){
+  var d=c.d,s=c.s,r=c.r,f=c.f;
+  if(r>=4 && d>=3 && s<=1 && f<=2) return "zql";
+  if(d<=1 && s<=1 && r>=4 && f>=4) return "lwj";
+  if(f>=5 && d<=1 && s<=1) return "zbc";
+  if(d>=5 && s<=2 && r<=2) return "sx";
+  if(d>=4 && f>=3 && s<=1) return "hzhf";
+  if(s>=5 && d<=1 && f<=2) return "htt";
+  if(r>=5 && s<=2 && d<=2 && f<=2) return "yf";
+  var ranked = ORDER.slice().sort(function(a,b){
+    return (c[b]-c[a]) || (ORDER.indexOf(a)-ORDER.indexOf(b));
+  });
+  return PAIR[ranked[0]+"|"+ranked[1]];
+}
+
+/* ================= 状态 ================= */
+var S = { idx:0, answers:new Array(QUESTIONS.length).fill(null), last:null };
+var $ = function(id){ return document.getElementById(id); };
+
+function show(view){
+  ["viewCover","viewQuiz","viewScan","viewResult"].forEach(function(v){
+    $(v).classList.toggle("on", v===view);
+  });
+  var foot = $("siteFooter");
+  if(foot) foot.style.display = (view==="viewQuiz" || view==="viewScan") ? "none" : "";
+  window.scrollTo({top:0,behavior:"auto"});
+}
+
+/* ================= 答题 ================= */
+function renderQuestion(){
+  var item = QUESTIONS[S.idx];
+  $("qNo").textContent = S.idx+1;
+  $("barMeta").textContent = "人格观测";
+  $("qText").textContent = item.q;
+
+  var ticks = $("ticks");
+  ticks.innerHTML = "";
+  for(var i=0;i<QUESTIONS.length;i++){
+    var el = document.createElement("i");
+    if(S.answers[i]) el.className = "done";
+    if(i===S.idx) el.className = "now";
+    ticks.appendChild(el);
+  }
+
+  var box = $("options");
+  box.innerHTML = "";
+  var letters = ["A","B","C","D"];
+  item.o.forEach(function(opt, i){
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "opt";
+    b.innerHTML = '<span class="key">'+letters[i]+'</span><span class="txt"></span>';
+    b.querySelector(".txt").textContent = opt.t;
+    if(S.answers[S.idx]===i) b.classList.add("picked");
+    b.addEventListener("click", function(){ pick(i); });
+    box.appendChild(b);
+  });
+
+  $("backBtn").disabled = S.idx===0;
+}
+
+function pick(i){
+  if(S.last && Date.now()-S.last < 260) return;
+  S.last = Date.now();
+  S.answers[S.idx] = i;
+  var btns = $("options").children;
+  for(var k=0;k<btns.length;k++) btns[k].classList.remove("picked");
+  btns[i].classList.add("picked");
+  setTimeout(function(){
+    if(S.idx < QUESTIONS.length-1){ S.idx++; renderQuestion(); }
+    else { runScan(); }
+  }, 280);
+}
+
+/* ================= 结算 ================= */
+function runScan(){
+  show("viewScan");
+  $("barMeta").textContent = "结算中";
+  var n = 0, target = 286;
+  var timer = setInterval(function(){
+    n += Math.ceil((target-n)/6);
+    if(n >= target) n = target;
+    $("scanNum").textContent = n;
+    if(n >= target) clearInterval(timer);
+  }, 55);
+  setTimeout(function(){ clearInterval(timer); showResult(); }, 1600);
+}
+
+function countDims(){
+  var c = {d:0,s:0,r:0,f:0};
+  S.answers.forEach(function(i, qi){
+    if(i===null) return;
+    c[QUESTIONS[qi].o[i].k]++;
+  });
+  return c;
+}
+
+function showResult(){
+  var c = countDims();
+  var key = judge(c);
+  var role = ROLES[key];
+
+  var ranked = ORDER.slice().sort(function(a,b){
+    return (c[b]-c[a]) || (ORDER.indexOf(a)-ORDER.indexOf(b));
+  });
+
+  $("barMeta").textContent = "观测结果";
+  $("resName").textContent = role.name;
+  $("resTitle").textContent = role.title;
+  $("resQuote").textContent = "“"+role.hook+"”";
+  $("hiddenBadge").classList.toggle("show", !!role.hidden);
+  $("resCode").textContent = role.hidden
+    ? "观察席 · 隐藏款"
+    : DIM[ranked[0]].name+" × "+DIM[ranked[1]].name;
+
+  var dims = $("dims");
+  dims.innerHTML = "";
+  ORDER.forEach(function(k){
+    var pct = Math.round(c[k]/10*100);
+    var row = document.createElement("div");
+    row.className = "dim";
+    row.innerHTML = '<dt>'+DIM[k].name+'</dt>'+
+      '<div class="track"><i class="fill'+(ranked[0]===k?' top':'')+'"></i></div>'+
+      '<dd>'+c[k]+'</dd>';
+    dims.appendChild(row);
+    var fill = row.querySelector(".fill");
+    setTimeout(function(){ fill.style.width = pct+"%"; }, 60);
+  });
+
+  var body = $("resBody");
+  body.innerHTML = "";
+  role.body.forEach(function(t){
+    var p = document.createElement("p");
+    p.textContent = t;
+    body.appendChild(p);
+  });
+
+  var tags = $("resTags");
+  tags.innerHTML = "";
+  role.tags.forEach(function(t){
+    var s = document.createElement("span");
+    s.className = "tag";
+    s.textContent = t;
+    tags.appendChild(s);
+  });
+
+  $("resMatch").textContent = role.match;
+
+  $("allGrid").innerHTML = Object.keys(ROLES).map(function(kk){
+    var r = ROLES[kk];
+    return '<div class="it'+(r.hidden?' hid':'')+(kk===key?' me':'')+'">'+
+      '<b>'+r.name+'</b><span>'+r.title.split(" · ")[0]+'</span></div>';
+  }).join("");
+
+  show("viewResult");
+}
+
+/* ================= 复制 ================= */
+function shareText(){
+  var c = countDims();
+  var role = ROLES[judge(c)];
+  var line = ORDER.map(function(k){ return DIM[k].name+c[k]; }).join(" / ");
+  return "我在《后会友期》人格观测里是【"+role.name+"】——"+role.title+
+    "\n"+role.hook+
+    "\n维度："+line+
+    "\n适合我的关系："+role.match;
+}
+
+$("copyBtn").addEventListener("click", function(){
+  var text = shareText();
+  var btn = this;
+  var done = function(){
+    btn.textContent = "已复制，去发笔记";
+    setTimeout(function(){ btn.textContent = "复制结果文案"; }, 1800);
+  };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done, function(){ fallback(text); done(); });
+  } else { fallback(text); done(); }
+});
+function fallback(text){
+  var ta = document.createElement("textarea");
+  ta.value = text;
+  ta.style.position = "fixed";
+  ta.style.opacity = "0";
+  document.body.appendChild(ta);
+  ta.select();
+  try{ document.execCommand("copy"); }catch(e){}
+  document.body.removeChild(ta);
+}
+
+/* ================= 事件 ================= */
+$("startBtn").addEventListener("click", function(){
+  S.idx = 0;
+  S.answers = new Array(QUESTIONS.length).fill(null);
+  show("viewQuiz");
+  renderQuestion();
+});
+$("backBtn").addEventListener("click", function(){
+  if(S.idx>0){ S.idx--; renderQuestion(); }
+});
+$("againBtn").addEventListener("click", function(){
+  S.idx = 0;
+  S.answers = new Array(QUESTIONS.length).fill(null);
+  show("viewQuiz");
+  renderQuestion();
+});
+</script>
+</body>
+</html>
